@@ -1,0 +1,705 @@
+{
+  "info" : {
+    "_postman_id" : "bcc4764d-f69b-47e1-ad14-590183326b9b",
+    "name" : "Review Load Balancer",
+    "description" : "Generated Postman collection for review-load-balancer",
+    "schema" : "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable" : [ {
+    "key" : "baseUrl",
+    "value" : "http://localhost:8080",
+    "type" : "string"
+  }, {
+    "key" : "bearerToken",
+    "value" : "",
+    "type" : "string"
+  }, {
+    "key" : "resourceId",
+    "value" : "sample-id",
+    "type" : "string"
+  }, {
+    "key" : "clientId",
+    "value" : "generated-service-client",
+    "type" : "string"
+  }, {
+    "key" : "clientSecret",
+    "value" : "change-me",
+    "type" : "string"
+  }, {
+    "key" : "scope",
+    "value" : "api.read api.write",
+    "type" : "string"
+  } ],
+  "item" : [ {
+    "name" : "Health",
+    "item" : [ {
+      "name" : "Health",
+      "request" : {
+        "auth" : {
+          "type" : "noauth"
+        },
+        "method" : "GET",
+        "header" : [ {
+          "key" : "Accept",
+          "value" : "application/json"
+        } ],
+        "url" : {
+          "raw" : "{{baseUrl}}/actuator/health",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "actuator", "health" ]
+        }
+      },
+      "response" : [ {
+        "name" : "OK",
+        "originalRequest" : {
+          "auth" : {
+            "type" : "noauth"
+          },
+          "method" : "GET",
+          "header" : [ {
+            "key" : "Accept",
+            "value" : "application/json"
+          } ],
+          "url" : {
+            "raw" : "{{baseUrl}}/actuator/health",
+            "host" : [ "{{baseUrl}}" ],
+            "path" : [ "actuator", "health" ]
+          }
+        },
+        "status" : "OK",
+        "code" : 200,
+        "_postman_previewlanguage" : "json",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json"
+        } ],
+        "cookie" : [ ],
+        "body" : "{\n  \"status\" : \"UP\"\n}"
+      } ]
+    }, {
+      "name" : "Liveness",
+      "request" : {
+        "auth" : {
+          "type" : "noauth"
+        },
+        "method" : "GET",
+        "header" : [ {
+          "key" : "Accept",
+          "value" : "application/json"
+        } ],
+        "url" : {
+          "raw" : "{{baseUrl}}/actuator/health/liveness",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "actuator", "health", "liveness" ]
+        }
+      },
+      "response" : [ {
+        "name" : "OK",
+        "originalRequest" : {
+          "auth" : {
+            "type" : "noauth"
+          },
+          "method" : "GET",
+          "header" : [ {
+            "key" : "Accept",
+            "value" : "application/json"
+          } ],
+          "url" : {
+            "raw" : "{{baseUrl}}/actuator/health/liveness",
+            "host" : [ "{{baseUrl}}" ],
+            "path" : [ "actuator", "health", "liveness" ]
+          }
+        },
+        "status" : "OK",
+        "code" : 200,
+        "_postman_previewlanguage" : "json",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json"
+        } ],
+        "cookie" : [ ],
+        "body" : "{\n  \"status\" : \"UP\"\n}"
+      } ]
+    }, {
+      "name" : "Readiness",
+      "request" : {
+        "auth" : {
+          "type" : "noauth"
+        },
+        "method" : "GET",
+        "header" : [ {
+          "key" : "Accept",
+          "value" : "application/json"
+        } ],
+        "url" : {
+          "raw" : "{{baseUrl}}/actuator/health/readiness",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "actuator", "health", "readiness" ]
+        }
+      },
+      "response" : [ {
+        "name" : "OK",
+        "originalRequest" : {
+          "auth" : {
+            "type" : "noauth"
+          },
+          "method" : "GET",
+          "header" : [ {
+            "key" : "Accept",
+            "value" : "application/json"
+          } ],
+          "url" : {
+            "raw" : "{{baseUrl}}/actuator/health/readiness",
+            "host" : [ "{{baseUrl}}" ],
+            "path" : [ "actuator", "health", "readiness" ]
+          }
+        },
+        "status" : "OK",
+        "code" : 200,
+        "_postman_previewlanguage" : "json",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json"
+        } ],
+        "cookie" : [ ],
+        "body" : "{\n  \"status\" : \"UP\"\n}"
+      } ]
+    }, {
+      "name" : "Metrics",
+      "request" : {
+        "auth" : {
+          "type" : "noauth"
+        },
+        "method" : "GET",
+        "header" : [ {
+          "key" : "Accept",
+          "value" : "application/json"
+        } ],
+        "url" : {
+          "raw" : "{{baseUrl}}/actuator/metrics",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "actuator", "metrics" ]
+        }
+      },
+      "response" : [ {
+        "name" : "OK",
+        "originalRequest" : {
+          "auth" : {
+            "type" : "noauth"
+          },
+          "method" : "GET",
+          "header" : [ {
+            "key" : "Accept",
+            "value" : "application/json"
+          } ],
+          "url" : {
+            "raw" : "{{baseUrl}}/actuator/metrics",
+            "host" : [ "{{baseUrl}}" ],
+            "path" : [ "actuator", "metrics" ]
+          }
+        },
+        "status" : "OK",
+        "code" : 200,
+        "_postman_previewlanguage" : "json",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json"
+        } ],
+        "cookie" : [ ],
+        "body" : "{\n  \"status\" : \"UP\"\n}"
+      } ]
+    }, {
+      "name" : "Prometheus",
+      "request" : {
+        "auth" : {
+          "type" : "noauth"
+        },
+        "method" : "GET",
+        "header" : [ {
+          "key" : "Accept",
+          "value" : "application/json"
+        } ],
+        "url" : {
+          "raw" : "{{baseUrl}}/actuator/prometheus",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "actuator", "prometheus" ]
+        }
+      },
+      "response" : [ {
+        "name" : "OK",
+        "originalRequest" : {
+          "auth" : {
+            "type" : "noauth"
+          },
+          "method" : "GET",
+          "header" : [ {
+            "key" : "Accept",
+            "value" : "application/json"
+          } ],
+          "url" : {
+            "raw" : "{{baseUrl}}/actuator/prometheus",
+            "host" : [ "{{baseUrl}}" ],
+            "path" : [ "actuator", "prometheus" ]
+          }
+        },
+        "status" : "OK",
+        "code" : 200,
+        "_postman_previewlanguage" : "json",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json"
+        } ],
+        "cookie" : [ ],
+        "body" : "{\n  \"status\" : \"UP\"\n}"
+      } ]
+    } ]
+  }, {
+    "name" : "Security",
+    "item" : [ {
+      "name" : "Get OAuth2 Token",
+      "request" : {
+        "auth" : {
+          "type" : "basic",
+          "basic" : [ {
+            "key" : "username",
+            "value" : "{{clientId}}",
+            "type" : "string"
+          }, {
+            "key" : "password",
+            "value" : "{{clientSecret}}",
+            "type" : "string"
+          } ]
+        },
+        "method" : "POST",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/x-www-form-urlencoded"
+        }, {
+          "key" : "Accept",
+          "value" : "application/json"
+        } ],
+        "body" : {
+          "mode" : "urlencoded",
+          "urlencoded" : [ {
+            "key" : "grant_type",
+            "value" : "client_credentials",
+            "type" : "text"
+          }, {
+            "key" : "scope",
+            "value" : "{{scope}}",
+            "type" : "text"
+          } ]
+        },
+        "url" : {
+          "raw" : "{{baseUrl}}/oauth2/token",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "oauth2", "token" ]
+        }
+      },
+      "event" : [ {
+        "listen" : "test",
+        "script" : {
+          "type" : "text/javascript",
+          "exec" : [ "const json = pm.response.json();", "if (json.access_token) {", "  pm.collectionVariables.set(\"bearerToken\", json.access_token);", "}" ]
+        }
+      } ]
+    } ]
+  }, {
+    "name" : "Assignments",
+    "item" : [ {
+      "name" : "Assign reviewers to a pull request",
+      "request" : {
+        "method" : "POST",
+        "header" : [ {
+          "key" : "Authorization",
+          "value" : "Bearer {{bearerToken}}"
+        }, {
+          "key" : "Content-Type",
+          "value" : "application/json"
+        }, {
+          "key" : "Accept",
+          "value" : "application/json"
+        } ],
+        "url" : {
+          "raw" : "{{baseUrl}}/assignments",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "assignments" ]
+        },
+        "body" : {
+          "mode" : "raw",
+          "raw" : "{\n  \"repoId\" : \"forgesphere/payment-service\",\n  \"pullRequestId\" : 4821,\n  \"author\" : \"amit.kumar@forgesphere.example.com\",\n  \"filesChanged\" : \"sample-filesChanged\",\n  \"requiredReviewerCount\" : 2,\n  \"priority\" : \"HIGH\",\n  \"requiredExpertise\" : [ \"payments\", \"discount-logic\" ],\n  \"excludeReviewers\" : [ \"rahul.verma@forgesphere.example.com\" ]\n}",
+          "options" : {
+            "raw" : {
+              "language" : "json"
+            }
+          }
+        }
+      },
+      "response" : [ {
+        "name" : "Created",
+        "originalRequest" : {
+          "method" : "POST",
+          "header" : [ {
+            "key" : "Authorization",
+            "value" : "Bearer {{bearerToken}}"
+          }, {
+            "key" : "Content-Type",
+            "value" : "application/json"
+          }, {
+            "key" : "Accept",
+            "value" : "application/json"
+          } ],
+          "url" : {
+            "raw" : "{{baseUrl}}/assignments",
+            "host" : [ "{{baseUrl}}" ],
+            "path" : [ "assignments" ]
+          },
+          "body" : {
+            "mode" : "raw",
+            "raw" : "{\n  \"repoId\" : \"forgesphere/payment-service\",\n  \"pullRequestId\" : 4821,\n  \"author\" : \"amit.kumar@forgesphere.example.com\",\n  \"filesChanged\" : \"sample-filesChanged\",\n  \"requiredReviewerCount\" : 2,\n  \"priority\" : \"HIGH\",\n  \"requiredExpertise\" : [ \"payments\", \"discount-logic\" ],\n  \"excludeReviewers\" : [ \"rahul.verma@forgesphere.example.com\" ]\n}",
+            "options" : {
+              "raw" : {
+                "language" : "json"
+              }
+            }
+          }
+        },
+        "status" : "Created",
+        "code" : 201,
+        "_postman_previewlanguage" : "json",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json"
+        } ],
+        "cookie" : [ ],
+        "body" : "{\n  \"assignmentId\" : \"9c8f1a3b-6d7e-4a12-8f5e-123456789abc\",\n  \"repoId\" : \"forgesphere/payment-service\",\n  \"pullRequestId\" : 4821,\n  \"pullRequestUrl\" : \"https://github.com/forgesphere/payment-service/pull/4821\",\n  \"author\" : \"amit.kumar@forgesphere.example.com\",\n  \"reviewers\" : [ {\n    \"role\" : \"PRIMARY\",\n    \"expertiseMatch\" : 0.92,\n    \"engineerId\" : \"priya.sharma@forgesphere.example.com\",\n    \"reasoning\" : \"Owns 68% of the changed files; has capacity (3 pending reviews); last reviewed 4 days ago.\",\n    \"name\" : \"Priya Sharma\",\n    \"fairnessScore\" : 78.5,\n    \"respondedAt\" : 948603367000,\n    \"currentLoad\" : 3,\n    \"status\" : \"IN_REVIEW\"\n  }, {\n    \"role\" : \"PRIMARY\",\n    \"expertiseMatch\" : 0.92,\n    \"engineerId\" : \"priya.sharma@forgesphere.example.com\",\n    \"reasoning\" : \"Owns 68% of the changed files; has capacity (3 pending reviews); last reviewed 4 days ago.\",\n    \"name\" : \"Priya Sharma\",\n    \"fairnessScore\" : 78.5,\n    \"respondedAt\" : 948603367000,\n    \"currentLoad\" : 3,\n    \"status\" : \"IN_REVIEW\"\n  } ],\n  \"requiredReviewerCount\" : 2,\n  \"priority\" : \"HIGH\",\n  \"status\" : \"PARTIALLY_REVIEWED\",\n  \"slaDeadline\" : 1791309600000,\n  \"slaStatus\" : \"ON_TRACK\",\n  \"filesChanged\" : [ {\n    \"linesRemoved\" : 32,\n    \"path\" : \"src/main/java/com/forgesphere/payment/DiscountService.java\",\n    \"linesAdded\" : 145\n  }, {\n    \"linesRemoved\" : 32,\n    \"path\" : \"src/main/java/com/forgesphere/payment/DiscountService.java\",\n    \"linesAdded\" : 145\n  } ],\n  \"assignedAt\" : 948603367000,\n  \"firstReviewAt\" : 948603367000,\n  \"completedAt\" : 948603367000,\n  \"totalReviewTimeMinutes\" : 42\n}"
+      }, {
+        "name" : "Bad Request",
+        "originalRequest" : {
+          "method" : "POST",
+          "header" : [ {
+            "key" : "Authorization",
+            "value" : "Bearer {{bearerToken}}"
+          }, {
+            "key" : "Content-Type",
+            "value" : "application/json"
+          }, {
+            "key" : "Accept",
+            "value" : "application/json"
+          } ],
+          "url" : {
+            "raw" : "{{baseUrl}}/assignments",
+            "host" : [ "{{baseUrl}}" ],
+            "path" : [ "assignments" ]
+          },
+          "body" : {
+            "mode" : "raw",
+            "raw" : "{\n  \"repoId\" : \"forgesphere/payment-service\",\n  \"pullRequestId\" : 4821,\n  \"author\" : \"amit.kumar@forgesphere.example.com\",\n  \"filesChanged\" : \"sample-filesChanged\",\n  \"requiredReviewerCount\" : 2,\n  \"priority\" : \"HIGH\",\n  \"requiredExpertise\" : [ \"payments\", \"discount-logic\" ],\n  \"excludeReviewers\" : [ \"rahul.verma@forgesphere.example.com\" ]\n}",
+            "options" : {
+              "raw" : {
+                "language" : "json"
+              }
+            }
+          }
+        },
+        "status" : "Bad Request",
+        "code" : 400,
+        "_postman_previewlanguage" : "json",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json"
+        } ],
+        "cookie" : [ ],
+        "body" : "{\n  \"timestamp\" : \"2026-10-05T18:38:54.222354131Z\",\n  \"status\" : 400,\n  \"code\" : \"request_failed\",\n  \"userMessage\" : \"Request failed\",\n  \"systemMessage\" : \"Sample error for documentation purposes\",\n  \"path\" : \"{{baseUrl}}\",\n  \"correlationId\" : \"sample-correlation-id\"\n}"
+      } ]
+    }, {
+      "name" : "Get the details of a review assignment",
+      "request" : {
+        "method" : "GET",
+        "header" : [ {
+          "key" : "Authorization",
+          "value" : "Bearer {{bearerToken}}"
+        }, {
+          "key" : "Accept",
+          "value" : "application/json"
+        } ],
+        "url" : {
+          "raw" : "{{baseUrl}}/assignments/9c8f1a3b-6d7e-4a12-8f5e-123456789abc",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "assignments", "9c8f1a3b-6d7e-4a12-8f5e-123456789abc" ]
+        }
+      },
+      "response" : [ {
+        "name" : "OK",
+        "originalRequest" : {
+          "method" : "GET",
+          "header" : [ {
+            "key" : "Authorization",
+            "value" : "Bearer {{bearerToken}}"
+          }, {
+            "key" : "Accept",
+            "value" : "application/json"
+          } ],
+          "url" : {
+            "raw" : "{{baseUrl}}/assignments/9c8f1a3b-6d7e-4a12-8f5e-123456789abc",
+            "host" : [ "{{baseUrl}}" ],
+            "path" : [ "assignments", "9c8f1a3b-6d7e-4a12-8f5e-123456789abc" ]
+          }
+        },
+        "status" : "OK",
+        "code" : 200,
+        "_postman_previewlanguage" : "json",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json"
+        } ],
+        "cookie" : [ ],
+        "body" : "{\n  \"assignmentId\" : \"9c8f1a3b-6d7e-4a12-8f5e-123456789abc\",\n  \"repoId\" : \"forgesphere/payment-service\",\n  \"pullRequestId\" : 4821,\n  \"pullRequestUrl\" : \"https://github.com/forgesphere/payment-service/pull/4821\",\n  \"author\" : \"amit.kumar@forgesphere.example.com\",\n  \"reviewers\" : [ {\n    \"role\" : \"PRIMARY\",\n    \"expertiseMatch\" : 0.92,\n    \"engineerId\" : \"priya.sharma@forgesphere.example.com\",\n    \"reasoning\" : \"Owns 68% of the changed files; has capacity (3 pending reviews); last reviewed 4 days ago.\",\n    \"name\" : \"Priya Sharma\",\n    \"fairnessScore\" : 78.5,\n    \"respondedAt\" : 948603367000,\n    \"currentLoad\" : 3,\n    \"status\" : \"IN_REVIEW\"\n  }, {\n    \"role\" : \"PRIMARY\",\n    \"expertiseMatch\" : 0.92,\n    \"engineerId\" : \"priya.sharma@forgesphere.example.com\",\n    \"reasoning\" : \"Owns 68% of the changed files; has capacity (3 pending reviews); last reviewed 4 days ago.\",\n    \"name\" : \"Priya Sharma\",\n    \"fairnessScore\" : 78.5,\n    \"respondedAt\" : 948603367000,\n    \"currentLoad\" : 3,\n    \"status\" : \"IN_REVIEW\"\n  } ],\n  \"requiredReviewerCount\" : 2,\n  \"priority\" : \"HIGH\",\n  \"status\" : \"PARTIALLY_REVIEWED\",\n  \"slaDeadline\" : 1791309600000,\n  \"slaStatus\" : \"ON_TRACK\",\n  \"filesChanged\" : [ {\n    \"linesRemoved\" : 32,\n    \"path\" : \"src/main/java/com/forgesphere/payment/DiscountService.java\",\n    \"linesAdded\" : 145\n  }, {\n    \"linesRemoved\" : 32,\n    \"path\" : \"src/main/java/com/forgesphere/payment/DiscountService.java\",\n    \"linesAdded\" : 145\n  } ],\n  \"assignedAt\" : 948603367000,\n  \"firstReviewAt\" : 948603367000,\n  \"completedAt\" : 948603367000,\n  \"totalReviewTimeMinutes\" : 42\n}"
+      }, {
+        "name" : "Not Found",
+        "originalRequest" : {
+          "method" : "GET",
+          "header" : [ {
+            "key" : "Authorization",
+            "value" : "Bearer {{bearerToken}}"
+          }, {
+            "key" : "Accept",
+            "value" : "application/json"
+          } ],
+          "url" : {
+            "raw" : "{{baseUrl}}/assignments/9c8f1a3b-6d7e-4a12-8f5e-123456789abc",
+            "host" : [ "{{baseUrl}}" ],
+            "path" : [ "assignments", "9c8f1a3b-6d7e-4a12-8f5e-123456789abc" ]
+          }
+        },
+        "status" : "Not Found",
+        "code" : 404,
+        "_postman_previewlanguage" : "json",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json"
+        } ],
+        "cookie" : [ ],
+        "body" : "{\n  \"timestamp\" : \"2026-10-05T18:38:54.222888278Z\",\n  \"status\" : 404,\n  \"code\" : \"request_failed\",\n  \"userMessage\" : \"Request failed\",\n  \"systemMessage\" : \"Sample error for documentation purposes\",\n  \"path\" : \"{{baseUrl}}\",\n  \"correlationId\" : \"sample-correlation-id\"\n}"
+      } ]
+    }, {
+      "name" : "Reassign a PR to a different reviewer",
+      "request" : {
+        "method" : "POST",
+        "header" : [ {
+          "key" : "Authorization",
+          "value" : "Bearer {{bearerToken}}"
+        }, {
+          "key" : "Content-Type",
+          "value" : "application/json"
+        }, {
+          "key" : "Accept",
+          "value" : "application/json"
+        } ],
+        "url" : {
+          "raw" : "{{baseUrl}}/assignments/sample-id/reassign",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "assignments", "sample-id", "reassign" ]
+        },
+        "body" : {
+          "mode" : "raw",
+          "raw" : "{\n  \"currentReviewer\" : \"amit.kumar@forgesphere.example.com\",\n  \"newReviewer\" : \"priya.sharma@forgesphere.example.com\",\n  \"reason\" : \"Original reviewer is on PTO; reassigning to backup.\",\n  \"notifyChannels\" : [ \"SLACK\" ]\n}",
+          "options" : {
+            "raw" : {
+              "language" : "json"
+            }
+          }
+        }
+      },
+      "response" : [ {
+        "name" : "OK",
+        "originalRequest" : {
+          "method" : "POST",
+          "header" : [ {
+            "key" : "Authorization",
+            "value" : "Bearer {{bearerToken}}"
+          }, {
+            "key" : "Content-Type",
+            "value" : "application/json"
+          }, {
+            "key" : "Accept",
+            "value" : "application/json"
+          } ],
+          "url" : {
+            "raw" : "{{baseUrl}}/assignments/sample-id/reassign",
+            "host" : [ "{{baseUrl}}" ],
+            "path" : [ "assignments", "sample-id", "reassign" ]
+          },
+          "body" : {
+            "mode" : "raw",
+            "raw" : "{\n  \"currentReviewer\" : \"amit.kumar@forgesphere.example.com\",\n  \"newReviewer\" : \"priya.sharma@forgesphere.example.com\",\n  \"reason\" : \"Original reviewer is on PTO; reassigning to backup.\",\n  \"notifyChannels\" : [ \"SLACK\" ]\n}",
+            "options" : {
+              "raw" : {
+                "language" : "json"
+              }
+            }
+          }
+        },
+        "status" : "OK",
+        "code" : 200,
+        "_postman_previewlanguage" : "json",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json"
+        } ],
+        "cookie" : [ ],
+        "body" : "{\n  \"assignmentId\" : \"9c8f1a3b-6d7e-4a12-8f5e-123456789abc\",\n  \"repoId\" : \"forgesphere/payment-service\",\n  \"pullRequestId\" : 4821,\n  \"pullRequestUrl\" : \"https://github.com/forgesphere/payment-service/pull/4821\",\n  \"author\" : \"amit.kumar@forgesphere.example.com\",\n  \"reviewers\" : [ {\n    \"role\" : \"PRIMARY\",\n    \"expertiseMatch\" : 0.92,\n    \"engineerId\" : \"priya.sharma@forgesphere.example.com\",\n    \"reasoning\" : \"Owns 68% of the changed files; has capacity (3 pending reviews); last reviewed 4 days ago.\",\n    \"name\" : \"Priya Sharma\",\n    \"fairnessScore\" : 78.5,\n    \"respondedAt\" : 948603367000,\n    \"currentLoad\" : 3,\n    \"status\" : \"IN_REVIEW\"\n  }, {\n    \"role\" : \"PRIMARY\",\n    \"expertiseMatch\" : 0.92,\n    \"engineerId\" : \"priya.sharma@forgesphere.example.com\",\n    \"reasoning\" : \"Owns 68% of the changed files; has capacity (3 pending reviews); last reviewed 4 days ago.\",\n    \"name\" : \"Priya Sharma\",\n    \"fairnessScore\" : 78.5,\n    \"respondedAt\" : 948603367000,\n    \"currentLoad\" : 3,\n    \"status\" : \"IN_REVIEW\"\n  } ],\n  \"requiredReviewerCount\" : 2,\n  \"priority\" : \"HIGH\",\n  \"status\" : \"PARTIALLY_REVIEWED\",\n  \"slaDeadline\" : 1791309600000,\n  \"slaStatus\" : \"ON_TRACK\",\n  \"filesChanged\" : [ {\n    \"linesRemoved\" : 32,\n    \"path\" : \"src/main/java/com/forgesphere/payment/DiscountService.java\",\n    \"linesAdded\" : 145\n  }, {\n    \"linesRemoved\" : 32,\n    \"path\" : \"src/main/java/com/forgesphere/payment/DiscountService.java\",\n    \"linesAdded\" : 145\n  } ],\n  \"assignedAt\" : 948603367000,\n  \"firstReviewAt\" : 948603367000,\n  \"completedAt\" : 948603367000,\n  \"totalReviewTimeMinutes\" : 42\n}"
+      }, {
+        "name" : "Bad Request",
+        "originalRequest" : {
+          "method" : "POST",
+          "header" : [ {
+            "key" : "Authorization",
+            "value" : "Bearer {{bearerToken}}"
+          }, {
+            "key" : "Content-Type",
+            "value" : "application/json"
+          }, {
+            "key" : "Accept",
+            "value" : "application/json"
+          } ],
+          "url" : {
+            "raw" : "{{baseUrl}}/assignments/sample-id/reassign",
+            "host" : [ "{{baseUrl}}" ],
+            "path" : [ "assignments", "sample-id", "reassign" ]
+          },
+          "body" : {
+            "mode" : "raw",
+            "raw" : "{\n  \"currentReviewer\" : \"amit.kumar@forgesphere.example.com\",\n  \"newReviewer\" : \"priya.sharma@forgesphere.example.com\",\n  \"reason\" : \"Original reviewer is on PTO; reassigning to backup.\",\n  \"notifyChannels\" : [ \"SLACK\" ]\n}",
+            "options" : {
+              "raw" : {
+                "language" : "json"
+              }
+            }
+          }
+        },
+        "status" : "Bad Request",
+        "code" : 400,
+        "_postman_previewlanguage" : "json",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json"
+        } ],
+        "cookie" : [ ],
+        "body" : "{\n  \"timestamp\" : \"2026-10-05T18:38:54.223556081Z\",\n  \"status\" : 400,\n  \"code\" : \"request_failed\",\n  \"userMessage\" : \"Request failed\",\n  \"systemMessage\" : \"Sample error for documentation purposes\",\n  \"path\" : \"{{baseUrl}}\",\n  \"correlationId\" : \"sample-correlation-id\"\n}"
+      } ]
+    } ]
+  }, {
+    "name" : "Workload",
+    "item" : [ {
+      "name" : "Get current review workload across the team",
+      "request" : {
+        "method" : "GET",
+        "header" : [ {
+          "key" : "Authorization",
+          "value" : "Bearer {{bearerToken}}"
+        }, {
+          "key" : "Accept",
+          "value" : "application/json"
+        } ],
+        "url" : {
+          "raw" : "{{baseUrl}}/workload?teamName=payments-team&repoId=forgesphere/payment-service&windowDays=30&sortBy=PENDING_REVIEWS",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "workload" ],
+          "query" : [ {
+            "key" : "teamName",
+            "value" : "payments-team"
+          }, {
+            "key" : "repoId",
+            "value" : "forgesphere/payment-service"
+          }, {
+            "key" : "windowDays",
+            "value" : 30
+          }, {
+            "key" : "sortBy",
+            "value" : "PENDING_REVIEWS"
+          } ]
+        }
+      },
+      "response" : [ {
+        "name" : "OK",
+        "originalRequest" : {
+          "method" : "GET",
+          "header" : [ {
+            "key" : "Authorization",
+            "value" : "Bearer {{bearerToken}}"
+          }, {
+            "key" : "Accept",
+            "value" : "application/json"
+          } ],
+          "url" : {
+            "raw" : "{{baseUrl}}/workload?teamName=payments-team&repoId=forgesphere/payment-service&windowDays=30&sortBy=PENDING_REVIEWS",
+            "host" : [ "{{baseUrl}}" ],
+            "path" : [ "workload" ],
+            "query" : [ {
+              "key" : "teamName",
+              "value" : "payments-team"
+            }, {
+              "key" : "repoId",
+              "value" : "forgesphere/payment-service"
+            }, {
+              "key" : "windowDays",
+              "value" : 30
+            }, {
+              "key" : "sortBy",
+              "value" : "PENDING_REVIEWS"
+            } ]
+          }
+        },
+        "status" : "OK",
+        "code" : 200,
+        "_postman_previewlanguage" : "json",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json"
+        } ],
+        "cookie" : [ ],
+        "body" : "{\n  \"teamName\" : \"payments-team\",\n  \"windowDays\" : 30,\n  \"generatedAt\" : 948603367000,\n  \"fairnessScore\" : {\n    \"grade\" : \"GOOD\",\n    \"overall\" : 82,\n    \"standardDeviation\" : 3.8\n  },\n  \"teamSummary\" : {\n    \"totalReviews\" : 482,\n    \"reviewsPerEngineer\" : 40.2,\n    \"avgTimeToMergeHours\" : 18.5,\n    \"totalPRs\" : 245,\n    \"avgResponseTimeMinutes\" : 145,\n    \"slaCompliancePercent\" : 91.2\n  },\n  \"engineerBreakdown\" : [ {\n    \"fairnessDelta\" : 10.5,\n    \"reviewsRequested\" : 51,\n    \"reviewsCompleted\" : 42,\n    \"pendingReviews\" : 7,\n    \"expertiseAreas\" : [ \"payments\", \"discount-logic\", \"refunds\" ],\n    \"availability\" : \"AVAILABLE\",\n    \"slaCompliancePercent\" : 82.5,\n    \"approvalRatePercent\" : 88.4,\n    \"burnoutRisk\" : \"MEDIUM\",\n    \"engineerId\" : \"amit.kumar@forgesphere.example.com\",\n    \"name\" : \"Amit Kumar\",\n    \"medianResponseTimeMinutes\" : 95,\n    \"fairnessScore\" : 92.5,\n    \"changesRequestedRatePercent\" : 22.1,\n    \"avgResponseTimeMinutes\" : 180,\n    \"seniority\" : \"SENIOR\"\n  }, {\n    \"fairnessDelta\" : 10.5,\n    \"reviewsRequested\" : 51,\n    \"reviewsCompleted\" : 42,\n    \"pendingReviews\" : 7,\n    \"expertiseAreas\" : [ \"payments\", \"discount-logic\", \"refunds\" ],\n    \"availability\" : \"AVAILABLE\",\n    \"slaCompliancePercent\" : 82.5,\n    \"approvalRatePercent\" : 88.4,\n    \"burnoutRisk\" : \"MEDIUM\",\n    \"engineerId\" : \"amit.kumar@forgesphere.example.com\",\n    \"name\" : \"Amit Kumar\",\n    \"medianResponseTimeMinutes\" : 95,\n    \"fairnessScore\" : 92.5,\n    \"changesRequestedRatePercent\" : 22.1,\n    \"avgResponseTimeMinutes\" : 180,\n    \"seniority\" : \"SENIOR\"\n  } ],\n  \"bottleneckAnalysis\" : {\n    \"slowestReviewers\" : [ \"rahul.verma@forgesphere.example.com\" ],\n    \"mostBlockedPRs\" : 8,\n    \"reviewersAtCapacity\" : [ \"amit.kumar@forgesphere.example.com\" ],\n    \"avgWaitTimeForFirstReviewMinutes\" : 240\n  },\n  \"recommendations\" : [ \"Amit has 7 pending reviews vs team avg of 4 — pause new assignments for 48h.\", \"Priya's SLA compliance dropped to 82% — consider rebalancing her queue.\", \"3 junior engineers have taken <10 reviews in 30 days — assign more for growth.\", \"Average time to first review is 4h — consider enabling 'review hours' blocks.\" ]\n}"
+      }, {
+        "name" : "Bad Request",
+        "originalRequest" : {
+          "method" : "GET",
+          "header" : [ {
+            "key" : "Authorization",
+            "value" : "Bearer {{bearerToken}}"
+          }, {
+            "key" : "Accept",
+            "value" : "application/json"
+          } ],
+          "url" : {
+            "raw" : "{{baseUrl}}/workload?teamName=payments-team&repoId=forgesphere/payment-service&windowDays=30&sortBy=PENDING_REVIEWS",
+            "host" : [ "{{baseUrl}}" ],
+            "path" : [ "workload" ],
+            "query" : [ {
+              "key" : "teamName",
+              "value" : "payments-team"
+            }, {
+              "key" : "repoId",
+              "value" : "forgesphere/payment-service"
+            }, {
+              "key" : "windowDays",
+              "value" : 30
+            }, {
+              "key" : "sortBy",
+              "value" : "PENDING_REVIEWS"
+            } ]
+          }
+        },
+        "status" : "Bad Request",
+        "code" : 400,
+        "_postman_previewlanguage" : "json",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json"
+        } ],
+        "cookie" : [ ],
+        "body" : "{\n  \"timestamp\" : \"2026-10-05T18:38:54.224582542Z\",\n  \"status\" : 400,\n  \"code\" : \"request_failed\",\n  \"userMessage\" : \"Request failed\",\n  \"systemMessage\" : \"Sample error for documentation purposes\",\n  \"path\" : \"{{baseUrl}}\",\n  \"correlationId\" : \"sample-correlation-id\"\n}"
+      } ]
+    } ]
+  } ]
+}

@@ -1,0 +1,7 @@
+{
+  "artifactId" : "review-load-balancer",
+  "status" : "CREATED",
+  "message" : "Mock collection generated",
+  "endpointCount" : 4,
+  "generatedAt" : "2026-10-05T18:38:55.119775736Z"
+}
