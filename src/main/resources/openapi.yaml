@@ -1,0 +1,924 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: devex@forgesphere.example.com
+    name: ForgeSphere Developer Productivity
+  description: "Intelligent code review assignment engine. Balances PR review workload\
+    \ \nfairly across the team while respecting expertise, availability, time \nzones,\
+    \ and current review queue. Prevents the \"5 reviews for one person, \n0 for another\"\
+    \ imbalance that burns out senior engineers and starves \njuniors of learning\
+    \ opportunities. Tracks review SLAs and surfaces \nbottlenecks before they delay\
+    \ releases.\n"
+  title: Review Load Balancer
+  version: 1.0.0
+servers:
+- description: Production Server
+  url: https://reviewbalancer.forgesphere.lightning.com/v1
+- description: Local Development Server
+  url: http://localhost:8133/v1
+security:
+- bearerAuth: []
+tags:
+- description: Auto-assign and manage PR reviewers.
+  name: Assignments
+- description: Track review workload and fairness metrics.
+  name: Workload
+paths:
+  /assignments:
+    post:
+      description: "Automatically assigns the optimal reviewers for a pull request\
+        \ based \non file ownership, expertise, current workload, availability, and\
+        \ \nfairness history. Respects constraints like time zone, on-call status,\
+        \ \nand vacation. Returns the selected reviewers with reasoning.\n"
+      operationId: assignReviewers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/assignReviewers_request"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Assignment"
+          description: Reviewers assigned successfully.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Invalid request payload or missing required fields.
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Reviewers already assigned for this PR.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal server error.
+      summary: Assign reviewers to a pull request
+      tags:
+      - Assignments
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: Assignments
+  /assignments/{assignmentId}:
+    get:
+      description: "Returns the current state of a review assignment — reviewers,\
+        \ \nreasoning behind their selection, review status, and SLA tracking.\n"
+      operationId: getAssignment
+      parameters:
+      - description: Unique identifier of the assignment.
+        example: 9c8f1a3b-6d7e-4a12-8f5e-123456789abc
+        explode: false
+        in: path
+        name: assignmentId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Assignment"
+          description: Assignment details retrieved successfully.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Assignment or team not found.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal server error.
+      summary: Get the details of a review assignment
+      tags:
+      - Assignments
+      x-accepts: application/json
+      x-tags:
+      - tag: Assignments
+  /assignments/{assignmentId}/reassign:
+    post:
+      description: "Manually reassigns a review to another reviewer. Use when a reviewer\
+        \ \ngoes on leave, is overloaded, or lacks context. The engine validates \n\
+        that the new assignment preserves fairness.\n"
+      operationId: reassignReviewer
+      parameters:
+      - description: Unique identifier of the assignment.
+        explode: false
+        in: path
+        name: assignmentId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/reassignReviewer_request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Assignment"
+          description: Review reassigned successfully.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Invalid request payload or missing required fields.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Assignment or team not found.
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Reassignment would violate fairness rules.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal server error.
+      summary: Reassign a PR to a different reviewer
+      tags:
+      - Assignments
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: Assignments
+  /workload:
+    get:
+      description: "Returns a live snapshot of every engineer's review queue — pending\
+        \ \nreviews, average response time, review SLA compliance, and fairness \n\
+        score. Used by managers to spot overloaded or idle reviewers before \nproblems\
+        \ arise.\n"
+      operationId: getTeamWorkload
+      parameters:
+      - description: Team to analyze.
+        example: payments-team
+        explode: true
+        in: query
+        name: teamName
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: Optional. Filter to a specific repository.
+        example: forgesphere/payment-service
+        explode: true
+        in: query
+        name: repoId
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Analysis window in days.
+        example: 30
+        explode: true
+        in: query
+        name: windowDays
+        required: false
+        schema:
+          default: 30
+          maximum: 90
+          minimum: 7
+          type: integer
+        style: form
+      - description: Sort order for the results.
+        explode: true
+        in: query
+        name: sortBy
+        required: false
+        schema:
+          default: PENDING_REVIEWS
+          enum:
+          - PENDING_REVIEWS
+          - AVG_RESPONSE_TIME
+          - SLA_COMPLIANCE
+          - FAIRNESS_SCORE
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkloadReport"
+          description: Team workload snapshot retrieved successfully.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Invalid request payload or missing required fields.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Assignment or team not found.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal server error.
+      summary: Get current review workload across the team
+      tags:
+      - Workload
+      x-accepts: application/json
+      x-tags:
+      - tag: Workload
+components:
+  responses:
+    BadRequest:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+      description: Invalid request payload or missing required fields.
+    NotFound:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+      description: Assignment or team not found.
+    InternalError:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+      description: Internal server error.
+  schemas:
+    Assignment:
+      example:
+        repoId: forgesphere/payment-service
+        completedAt: 2000-01-23T04:56:07.000+00:00
+        slaDeadline: 2026-10-06T18:00:00Z
+        author: amit.kumar@forgesphere.example.com
+        filesChanged:
+        - linesRemoved: 32
+          path: src/main/java/com/forgesphere/payment/DiscountService.java
+          linesAdded: 145
+        - linesRemoved: 32
+          path: src/main/java/com/forgesphere/payment/DiscountService.java
+          linesAdded: 145
+        assignedAt: 2000-01-23T04:56:07.000+00:00
+        firstReviewAt: 2000-01-23T04:56:07.000+00:00
+        pullRequestId: 4821
+        priority: HIGH
+        assignmentId: 9c8f1a3b-6d7e-4a12-8f5e-123456789abc
+        reviewers:
+        - role: PRIMARY
+          expertiseMatch: 0.92
+          engineerId: priya.sharma@forgesphere.example.com
+          reasoning: Owns 68% of the changed files; has capacity (3 pending reviews);
+            last reviewed 4 days ago.
+          name: Priya Sharma
+          fairnessScore: 78.5
+          respondedAt: 2000-01-23T04:56:07.000+00:00
+          currentLoad: 3
+          status: IN_REVIEW
+        - role: PRIMARY
+          expertiseMatch: 0.92
+          engineerId: priya.sharma@forgesphere.example.com
+          reasoning: Owns 68% of the changed files; has capacity (3 pending reviews);
+            last reviewed 4 days ago.
+          name: Priya Sharma
+          fairnessScore: 78.5
+          respondedAt: 2000-01-23T04:56:07.000+00:00
+          currentLoad: 3
+          status: IN_REVIEW
+        totalReviewTimeMinutes: 42
+        slaStatus: ON_TRACK
+        requiredReviewerCount: 2
+        pullRequestUrl: https://github.com/forgesphere/payment-service/pull/4821
+        status: PARTIALLY_REVIEWED
+      properties:
+        assignmentId:
+          example: 9c8f1a3b-6d7e-4a12-8f5e-123456789abc
+          format: uuid
+          type: string
+        repoId:
+          example: forgesphere/payment-service
+          type: string
+        pullRequestId:
+          example: 4821
+          type: integer
+        pullRequestUrl:
+          example: https://github.com/forgesphere/payment-service/pull/4821
+          type: string
+        author:
+          example: amit.kumar@forgesphere.example.com
+          type: string
+        reviewers:
+          description: Assigned reviewers with reasoning.
+          items:
+            $ref: "#/components/schemas/Assignment_reviewers_inner"
+          type: array
+        requiredReviewerCount:
+          example: 2
+          type: integer
+        priority:
+          enum:
+          - LOW
+          - NORMAL
+          - HIGH
+          - URGENT
+          example: HIGH
+          type: string
+        status:
+          enum:
+          - OPEN
+          - PARTIALLY_REVIEWED
+          - FULLY_REVIEWED
+          - MERGED
+          - CLOSED
+          example: PARTIALLY_REVIEWED
+          type: string
+        slaDeadline:
+          description: When the review should be completed by.
+          example: 2026-10-06T18:00:00Z
+          format: date-time
+          type: string
+        slaStatus:
+          enum:
+          - ON_TRACK
+          - AT_RISK
+          - BREACHED
+          example: ON_TRACK
+          type: string
+        filesChanged:
+          items:
+            $ref: "#/components/schemas/Assignment_filesChanged_inner"
+          type: array
+        assignedAt:
+          format: date-time
+          type: string
+        firstReviewAt:
+          format: date-time
+          type: string
+        completedAt:
+          format: date-time
+          type: string
+        totalReviewTimeMinutes:
+          example: 42
+          type: integer
+      required:
+      - assignedAt
+      - assignmentId
+      - author
+      - priority
+      - pullRequestId
+      - repoId
+      - reviewers
+      - status
+      type: object
+    WorkloadReport:
+      example:
+        teamName: payments-team
+        teamSummary:
+          totalReviews: 482
+          reviewsPerEngineer: 40.2
+          avgTimeToMergeHours: 18.5
+          totalPRs: 245
+          avgResponseTimeMinutes: 145
+          slaCompliancePercent: 91.2
+        bottleneckAnalysis:
+          slowestReviewers:
+          - rahul.verma@forgesphere.example.com
+          mostBlockedPRs: 8
+          reviewersAtCapacity:
+          - amit.kumar@forgesphere.example.com
+          avgWaitTimeForFirstReviewMinutes: 240
+        generatedAt: 2000-01-23T04:56:07.000+00:00
+        fairnessScore:
+          grade: GOOD
+          overall: 82
+          standardDeviation: 3.8
+        windowDays: 30
+        recommendations:
+        - Amit has 7 pending reviews vs team avg of 4 — pause new assignments for
+          48h.
+        - Priya's SLA compliance dropped to 82% — consider rebalancing her queue.
+        - 3 junior engineers have taken <10 reviews in 30 days — assign more for growth.
+        - Average time to first review is 4h — consider enabling 'review hours' blocks.
+        engineerBreakdown:
+        - fairnessDelta: 10.5
+          reviewsRequested: 51
+          reviewsCompleted: 42
+          pendingReviews: 7
+          expertiseAreas:
+          - payments
+          - discount-logic
+          - refunds
+          availability: AVAILABLE
+          slaCompliancePercent: 82.5
+          approvalRatePercent: 88.4
+          burnoutRisk: MEDIUM
+          engineerId: amit.kumar@forgesphere.example.com
+          name: Amit Kumar
+          medianResponseTimeMinutes: 95
+          fairnessScore: 92.5
+          changesRequestedRatePercent: 22.1
+          avgResponseTimeMinutes: 180
+          seniority: SENIOR
+        - fairnessDelta: 10.5
+          reviewsRequested: 51
+          reviewsCompleted: 42
+          pendingReviews: 7
+          expertiseAreas:
+          - payments
+          - discount-logic
+          - refunds
+          availability: AVAILABLE
+          slaCompliancePercent: 82.5
+          approvalRatePercent: 88.4
+          burnoutRisk: MEDIUM
+          engineerId: amit.kumar@forgesphere.example.com
+          name: Amit Kumar
+          medianResponseTimeMinutes: 95
+          fairnessScore: 92.5
+          changesRequestedRatePercent: 22.1
+          avgResponseTimeMinutes: 180
+          seniority: SENIOR
+      properties:
+        teamName:
+          example: payments-team
+          type: string
+        windowDays:
+          example: 30
+          type: integer
+        generatedAt:
+          format: date-time
+          type: string
+        fairnessScore:
+          $ref: "#/components/schemas/WorkloadReport_fairnessScore"
+        teamSummary:
+          $ref: "#/components/schemas/WorkloadReport_teamSummary"
+        engineerBreakdown:
+          items:
+            $ref: "#/components/schemas/WorkloadReport_engineerBreakdown_inner"
+          type: array
+        bottleneckAnalysis:
+          $ref: "#/components/schemas/WorkloadReport_bottleneckAnalysis"
+        recommendations:
+          example:
+          - Amit has 7 pending reviews vs team avg of 4 — pause new assignments for
+            48h.
+          - Priya's SLA compliance dropped to 82% — consider rebalancing her queue.
+          - 3 junior engineers have taken <10 reviews in 30 days — assign more for
+            growth.
+          - Average time to first review is 4h — consider enabling 'review hours'
+            blocks.
+          items:
+            type: string
+          type: array
+      required:
+      - engineerBreakdown
+      - fairnessScore
+      - generatedAt
+      - recommendations
+      - teamName
+      - teamSummary
+      - windowDays
+      type: object
+    ErrorResponse:
+      properties:
+        status:
+          example: 409
+          type: integer
+        errorCode:
+          example: FAIRNESS_VIOLATION
+          type: string
+        message:
+          example: Reassignment would push Priya above the fair-review threshold.
+          type: string
+        timestamp:
+          format: date-time
+          type: string
+        path:
+          example: /v1/assignments/9c8f1a3b/reassign
+          type: string
+        serviceTransactionId:
+          example: 523f52b2-64a5-465e-b245-3efbe78f70ae
+          type: string
+      required:
+      - message
+      - path
+      - status
+      - timestamp
+      type: object
+    assignReviewers_request_filesChanged_inner:
+      properties:
+        path:
+          example: src/main/java/com/forgesphere/payment/DiscountService.java
+          type: string
+        linesAdded:
+          example: 145
+          type: integer
+        linesRemoved:
+          example: 32
+          type: integer
+      required:
+      - linesAdded
+      - linesRemoved
+      - path
+      type: object
+    assignReviewers_request:
+      properties:
+        repoId:
+          description: Repository containing the PR.
+          example: forgesphere/payment-service
+          type: string
+        pullRequestId:
+          description: Pull request number.
+          example: 4821
+          type: integer
+        author:
+          description: PR author (excluded from reviewers).
+          example: amit.kumar@forgesphere.example.com
+          type: string
+        filesChanged:
+          description: List of changed files with complexity.
+          items:
+            $ref: "#/components/schemas/assignReviewers_request_filesChanged_inner"
+          type: array
+        requiredReviewerCount:
+          default: 2
+          description: How many reviewers needed.
+          example: 2
+          maximum: 5
+          minimum: 1
+          type: integer
+        priority:
+          default: NORMAL
+          description: PR urgency — affects assignment speed.
+          enum:
+          - LOW
+          - NORMAL
+          - HIGH
+          - URGENT
+          example: HIGH
+          type: string
+        requiredExpertise:
+          description: Optional. Required domain knowledge.
+          example:
+          - payments
+          - discount-logic
+          items:
+            type: string
+          type: array
+        excludeReviewers:
+          description: Reviewers to explicitly exclude.
+          example:
+          - rahul.verma@forgesphere.example.com
+          items:
+            type: string
+          type: array
+      required:
+      - author
+      - filesChanged
+      - pullRequestId
+      - repoId
+      type: object
+    reassignReviewer_request:
+      properties:
+        currentReviewer:
+          description: Reviewer being replaced.
+          example: amit.kumar@forgesphere.example.com
+          type: string
+        newReviewer:
+          description: New reviewer to assign.
+          example: priya.sharma@forgesphere.example.com
+          type: string
+        reason:
+          description: Reason for reassignment (min 15 chars).
+          example: Original reviewer is on PTO; reassigning to backup.
+          minLength: 15
+          type: string
+        notifyChannels:
+          description: Channels to notify of the reassignment.
+          example:
+          - SLACK
+          items:
+            enum:
+            - EMAIL
+            - SLACK
+            - PAGERDUTY
+            - WEBHOOK
+            type: string
+          type: array
+      required:
+      - currentReviewer
+      - newReviewer
+      - reason
+      type: object
+    Assignment_reviewers_inner:
+      example:
+        role: PRIMARY
+        expertiseMatch: 0.92
+        engineerId: priya.sharma@forgesphere.example.com
+        reasoning: Owns 68% of the changed files; has capacity (3 pending reviews);
+          last reviewed 4 days ago.
+        name: Priya Sharma
+        fairnessScore: 78.5
+        respondedAt: 2000-01-23T04:56:07.000+00:00
+        currentLoad: 3
+        status: IN_REVIEW
+      properties:
+        engineerId:
+          example: priya.sharma@forgesphere.example.com
+          type: string
+        name:
+          example: Priya Sharma
+          type: string
+        role:
+          enum:
+          - PRIMARY
+          - SECONDARY
+          - SUBJECT_EXPERT
+          - LEARNING_OPPORTUNITY
+          example: PRIMARY
+          type: string
+        expertiseMatch:
+          description: 0-1 score of how well this reviewer knows the files.
+          example: 0.92
+          type: number
+        currentLoad:
+          description: Pending reviews at assignment time.
+          example: 3
+          type: integer
+        fairnessScore:
+          description: Higher = more reviews taken historically.
+          example: 78.5
+          type: number
+        reasoning:
+          example: Owns 68% of the changed files; has capacity (3 pending reviews);
+            last reviewed 4 days ago.
+          type: string
+        status:
+          enum:
+          - PENDING
+          - IN_REVIEW
+          - APPROVED
+          - CHANGES_REQUESTED
+          - DISMISSED
+          example: IN_REVIEW
+          type: string
+        respondedAt:
+          format: date-time
+          type: string
+      required:
+      - currentLoad
+      - engineerId
+      - expertiseMatch
+      - name
+      - role
+      type: object
+    Assignment_filesChanged_inner:
+      example:
+        linesRemoved: 32
+        path: src/main/java/com/forgesphere/payment/DiscountService.java
+        linesAdded: 145
+      properties:
+        path:
+          example: src/main/java/com/forgesphere/payment/DiscountService.java
+          type: string
+        linesAdded:
+          example: 145
+          type: integer
+        linesRemoved:
+          example: 32
+          type: integer
+      type: object
+    WorkloadReport_fairnessScore:
+      example:
+        grade: GOOD
+        overall: 82
+        standardDeviation: 3.8
+      properties:
+        overall:
+          description: 100 = perfectly balanced review load.
+          example: 82
+          maximum: 100
+          minimum: 0
+          type: number
+        grade:
+          enum:
+          - EXCELLENT
+          - GOOD
+          - FAIR
+          - UNFAIR
+          - CRITICAL
+          example: GOOD
+          type: string
+        standardDeviation:
+          description: Lower is better.
+          example: 3.8
+          type: number
+      required:
+      - grade
+      - overall
+      type: object
+    WorkloadReport_teamSummary:
+      example:
+        totalReviews: 482
+        reviewsPerEngineer: 40.2
+        avgTimeToMergeHours: 18.5
+        totalPRs: 245
+        avgResponseTimeMinutes: 145
+        slaCompliancePercent: 91.2
+      properties:
+        totalPRs:
+          example: 245
+          type: integer
+        totalReviews:
+          example: 482
+          type: integer
+        avgResponseTimeMinutes:
+          example: 145
+          type: integer
+        avgTimeToMergeHours:
+          example: 18.5
+          format: double
+          type: number
+        slaCompliancePercent:
+          example: 91.2
+          format: double
+          type: number
+        reviewsPerEngineer:
+          example: 40.2
+          format: double
+          type: number
+      required:
+      - avgResponseTimeMinutes
+      - slaCompliancePercent
+      - totalPRs
+      - totalReviews
+      type: object
+    WorkloadReport_engineerBreakdown_inner:
+      example:
+        fairnessDelta: 10.5
+        reviewsRequested: 51
+        reviewsCompleted: 42
+        pendingReviews: 7
+        expertiseAreas:
+        - payments
+        - discount-logic
+        - refunds
+        availability: AVAILABLE
+        slaCompliancePercent: 82.5
+        approvalRatePercent: 88.4
+        burnoutRisk: MEDIUM
+        engineerId: amit.kumar@forgesphere.example.com
+        name: Amit Kumar
+        medianResponseTimeMinutes: 95
+        fairnessScore: 92.5
+        changesRequestedRatePercent: 22.1
+        avgResponseTimeMinutes: 180
+        seniority: SENIOR
+      properties:
+        engineerId:
+          example: amit.kumar@forgesphere.example.com
+          type: string
+        name:
+          example: Amit Kumar
+          type: string
+        seniority:
+          enum:
+          - JUNIOR
+          - MID
+          - SENIOR
+          - STAFF
+          - PRINCIPAL
+          example: SENIOR
+          type: string
+        pendingReviews:
+          description: Reviews currently in queue.
+          example: 7
+          type: integer
+        reviewsCompleted:
+          example: 42
+          type: integer
+        reviewsRequested:
+          example: 51
+          type: integer
+        avgResponseTimeMinutes:
+          example: 180
+          type: integer
+        medianResponseTimeMinutes:
+          example: 95
+          type: integer
+        slaCompliancePercent:
+          example: 82.5
+          format: double
+          type: number
+        approvalRatePercent:
+          example: 88.4
+          format: double
+          type: number
+        changesRequestedRatePercent:
+          example: 22.1
+          format: double
+          type: number
+        fairnessScore:
+          description: Higher = more reviews taken relative to team.
+          example: 92.5
+          type: number
+        fairnessDelta:
+          description: Difference from team average (+ = more reviews).
+          example: 10.5
+          type: number
+        burnoutRisk:
+          enum:
+          - LOW
+          - MEDIUM
+          - HIGH
+          - CRITICAL
+          example: MEDIUM
+          type: string
+        expertiseAreas:
+          example:
+          - payments
+          - discount-logic
+          - refunds
+          items:
+            type: string
+          type: array
+        availability:
+          enum:
+          - AVAILABLE
+          - ON_LEAVE
+          - ONCALL
+          - FOCUS_TIME
+          - DO_NOT_DISTURB
+          example: AVAILABLE
+          type: string
+      required:
+      - avgResponseTimeMinutes
+      - engineerId
+      - fairnessScore
+      - name
+      - pendingReviews
+      - reviewsCompleted
+      type: object
+    WorkloadReport_bottleneckAnalysis:
+      description: Where reviews are getting stuck.
+      example:
+        slowestReviewers:
+        - rahul.verma@forgesphere.example.com
+        mostBlockedPRs: 8
+        reviewersAtCapacity:
+        - amit.kumar@forgesphere.example.com
+        avgWaitTimeForFirstReviewMinutes: 240
+      properties:
+        slowestReviewers:
+          example:
+          - rahul.verma@forgesphere.example.com
+          items:
+            type: string
+          type: array
+        mostBlockedPRs:
+          example: 8
+          type: integer
+        avgWaitTimeForFirstReviewMinutes:
+          example: 240
+          type: integer
+        reviewersAtCapacity:
+          example:
+          - amit.kumar@forgesphere.example.com
+          items:
+            type: string
+          type: array
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      description: JWT token issued to developers or team leads.
+      scheme: bearer
+      type: http
