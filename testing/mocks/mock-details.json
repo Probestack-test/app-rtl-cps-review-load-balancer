@@ -1,0 +1,98 @@
+{
+  "artifactId" : "review-load-balancer",
+  "resourceId" : "6ac3ed7d2fadbb6a58d3d9d6",
+  "generatedAt" : "2026-10-05T18:38:55.112611761Z",
+  "mock" : {
+    "id" : "ebe49b98-01cf-4f9a-be8b-1c10b1c89c20",
+    "microserviceId" : null,
+    "specMetadataId" : "6ac3ee0323399e0b2ec69f60",
+    "apiSpecName" : "Review Load Balancer",
+    "name" : "mock-review-load-balancer",
+    "mockServiceName" : "mock-review-load-balancer",
+    "mockServerUrl" : "https://forgesphere.probestack.io/mock-api/v1/api/mocks/mock-ca090e3a",
+    "mockUrl" : "mock-ca090e3a",
+    "isPrivate" : false,
+    "delayMs" : 0,
+    "responseLatencyMs" : 0,
+    "requestCount" : 0,
+    "createdAt" : "2026-10-05T18:36:36.777Z",
+    "updatedAt" : "2026-10-05T18:36:36.784Z"
+  },
+  "endpoints" : [ {
+    "id" : "722d2dca-5967-4f84-817f-96335604c876",
+    "isActive" : true,
+    "request" : {
+      "method" : "POST",
+      "path" : "/assignments",
+      "bodySample" : "{\"repoId\":\"forgesphere/payment-service\",\"pullRequestId\":4821,\"author\":\"amit.kumar@forgesphere.example.com\",\"filesChanged\":[{\"path\":\"src/main/java/com/forgesphere/payment/DiscountService.java\",\"linesAdded\":145,\"linesRemoved\":32}],\"requiredReviewerCount\":2,\"priority\":\"HIGH\",\"requiredExpertise\":[\"payments\",\"discount-logic\"],\"excludeReviewers\":[\"rahul.verma@forgesphere.example.com\"]}",
+      "validationMode" : "NONE",
+      "validationSchema" : null,
+      "validateMethod" : true
+    },
+    "response" : {
+      "status" : 201,
+      "headers" : {
+        "Content-Type" : "application/json"
+      },
+      "body" : "{\"assignmentId\":\"9c8f1a3b-6d7e-4a12-8f5e-123456789abc\",\"repoId\":\"forgesphere/payment-service\",\"pullRequestId\":4821,\"pullRequestUrl\":\"https://github.com/forgesphere/payment-service/pull/4821\",\"author\":\"amit.kumar@forgesphere.example.com\",\"reviewers\":[{\"engineerId\":\"priya.sharma@forgesphere.example.com\",\"name\":\"Priya Sharma\",\"role\":\"PRIMARY\",\"expertiseMatch\":0.92,\"currentLoad\":3,\"fairnessScore\":78.5,\"reasoning\":\"Owns 68% of the changed files; has capacity (3 pending reviews); last reviewed 4 days ago.\",\"status\":\"IN_REVIEW\",\"respondedAt\":\"2024-01-01T00:00:00Z\"}],\"requiredReviewerCount\":2,\"priority\":\"HIGH\",\"status\":\"PARTIALLY_REVIEWED\",\"slaDeadline\":\"2026-10-06T18:00:00Z\",\"slaStatus\":\"ON_TRACK\",\"filesChanged\":[{\"path\":\"src/main/java/com/forgesphere/payment/DiscountService.java\",\"linesAdded\":145,\"linesRemoved\":32}],\"assignedAt\":\"2024-01-01T00:00:00Z\",\"firstReviewAt\":\"2024-01-01T00:00:00Z\",\"completedAt\":\"2024-01-01T00:00:00Z\",\"totalReviewTimeMinutes\":42}",
+      "delayMs" : 0
+    }
+  }, {
+    "id" : "d49a023b-13d0-46fd-ba0e-d8a90ae24d10",
+    "isActive" : true,
+    "request" : {
+      "method" : "GET",
+      "path" : "/assignments/{assignmentId}",
+      "bodySample" : null,
+      "validationMode" : "NONE",
+      "validationSchema" : null,
+      "validateMethod" : true
+    },
+    "response" : {
+      "status" : 200,
+      "headers" : {
+        "Content-Type" : "application/json"
+      },
+      "body" : "{\"assignmentId\":\"9c8f1a3b-6d7e-4a12-8f5e-123456789abc\",\"repoId\":\"forgesphere/payment-service\",\"pullRequestId\":4821,\"pullRequestUrl\":\"https://github.com/forgesphere/payment-service/pull/4821\",\"author\":\"amit.kumar@forgesphere.example.com\",\"reviewers\":[{\"engineerId\":\"priya.sharma@forgesphere.example.com\",\"name\":\"Priya Sharma\",\"role\":\"PRIMARY\",\"expertiseMatch\":0.92,\"currentLoad\":3,\"fairnessScore\":78.5,\"reasoning\":\"Owns 68% of the changed files; has capacity (3 pending reviews); last reviewed 4 days ago.\",\"status\":\"IN_REVIEW\",\"respondedAt\":\"2024-01-01T00:00:00Z\"}],\"requiredReviewerCount\":2,\"priority\":\"HIGH\",\"status\":\"PARTIALLY_REVIEWED\",\"slaDeadline\":\"2026-10-06T18:00:00Z\",\"slaStatus\":\"ON_TRACK\",\"filesChanged\":[{\"path\":\"src/main/java/com/forgesphere/payment/DiscountService.java\",\"linesAdded\":145,\"linesRemoved\":32}],\"assignedAt\":\"2024-01-01T00:00:00Z\",\"firstReviewAt\":\"2024-01-01T00:00:00Z\",\"completedAt\":\"2024-01-01T00:00:00Z\",\"totalReviewTimeMinutes\":42}",
+      "delayMs" : 0
+    }
+  }, {
+    "id" : "3f9135af-c16b-4204-9db2-d03ce70c4022",
+    "isActive" : true,
+    "request" : {
+      "method" : "POST",
+      "path" : "/assignments/{assignmentId}/reassign",
+      "bodySample" : "{\"currentReviewer\":\"amit.kumar@forgesphere.example.com\",\"newReviewer\":\"priya.sharma@forgesphere.example.com\",\"reason\":\"Original reviewer is on PTO; reassigning to backup.\",\"notifyChannels\":[\"SLACK\"]}",
+      "validationMode" : "NONE",
+      "validationSchema" : null,
+      "validateMethod" : true
+    },
+    "response" : {
+      "status" : 200,
+      "headers" : {
+        "Content-Type" : "application/json"
+      },
+      "body" : "{\"assignmentId\":\"9c8f1a3b-6d7e-4a12-8f5e-123456789abc\",\"repoId\":\"forgesphere/payment-service\",\"pullRequestId\":4821,\"pullRequestUrl\":\"https://github.com/forgesphere/payment-service/pull/4821\",\"author\":\"amit.kumar@forgesphere.example.com\",\"reviewers\":[{\"engineerId\":\"priya.sharma@forgesphere.example.com\",\"name\":\"Priya Sharma\",\"role\":\"PRIMARY\",\"expertiseMatch\":0.92,\"currentLoad\":3,\"fairnessScore\":78.5,\"reasoning\":\"Owns 68% of the changed files; has capacity (3 pending reviews); last reviewed 4 days ago.\",\"status\":\"IN_REVIEW\",\"respondedAt\":\"2024-01-01T00:00:00Z\"}],\"requiredReviewerCount\":2,\"priority\":\"HIGH\",\"status\":\"PARTIALLY_REVIEWED\",\"slaDeadline\":\"2026-10-06T18:00:00Z\",\"slaStatus\":\"ON_TRACK\",\"filesChanged\":[{\"path\":\"src/main/java/com/forgesphere/payment/DiscountService.java\",\"linesAdded\":145,\"linesRemoved\":32}],\"assignedAt\":\"2024-01-01T00:00:00Z\",\"firstReviewAt\":\"2024-01-01T00:00:00Z\",\"completedAt\":\"2024-01-01T00:00:00Z\",\"totalReviewTimeMinutes\":42}",
+      "delayMs" : 0
+    }
+  }, {
+    "id" : "30a3424b-380c-47be-9a30-290b82d7a2e6",
+    "isActive" : true,
+    "request" : {
+      "method" : "GET",
+      "path" : "/workload",
+      "bodySample" : null,
+      "validationMode" : "NONE",
+      "validationSchema" : null,
+      "validateMethod" : true
+    },
+    "response" : {
+      "status" : 200,
+      "headers" : {
+        "Content-Type" : "application/json"
+      },
+      "body" : "{\"teamName\":\"payments-team\",\"windowDays\":30,\"generatedAt\":\"2024-01-01T00:00:00Z\",\"fairnessScore\":{\"overall\":82,\"grade\":\"GOOD\",\"standardDeviation\":3.8},\"teamSummary\":{\"totalPRs\":245,\"totalReviews\":482,\"avgResponseTimeMinutes\":145,\"avgTimeToMergeHours\":18.5,\"slaCompliancePercent\":91.2,\"reviewsPerEngineer\":40.2},\"engineerBreakdown\":[{\"engineerId\":\"amit.kumar@forgesphere.example.com\",\"name\":\"Amit Kumar\",\"seniority\":\"SENIOR\",\"pendingReviews\":7,\"reviewsCompleted\":42,\"reviewsRequested\":51,\"avgResponseTimeMinutes\":180,\"medianResponseTimeMinutes\":95,\"slaCompliancePercent\":82.5,\"approvalRatePercent\":88.4,\"changesRequestedRatePercent\":22.1,\"fairnessScore\":92.5,\"fairnessDelta\":10.5,\"burnoutRisk\":\"MEDIUM\",\"expertiseAreas\":[\"payments\",\"discount-logic\",\"refunds\"],\"availability\":\"AVAILABLE\"}],\"bottleneckAnalysis\":{\"slowestReviewers\":[\"rahul.verma@forgesphere.example.com\"],\"mostBlockedPRs\":8,\"avgWaitTimeForFirstReviewMinutes\":240,\"reviewersAtCapacity\":[\"amit.kumar@forgesphere.example.com\"]},\"recommendations\":[\"Amit has 7 pending reviews vs team avg of 4 — pause new assignments for 48h.\",\"Priya's SLA compliance dropped to 82% — consider rebalancing her queue.\",\"3 junior engineers have taken <10 reviews in 30 days — assign more for growth.\",\"Average time to first review is 4h — consider enabling 'review hours' blocks.\"]}",
+      "delayMs" : 0
+    }
+  } ]
+}
