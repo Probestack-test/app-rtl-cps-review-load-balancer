@@ -8,7 +8,6 @@ Generated Spring Boot application from OpenAPI specification.
 - **Version**: 1.0.0
 - **Base Package**: com.probestack.forgestudio.design
 
-
 ## Getting Started
 
 ### Building the Project
