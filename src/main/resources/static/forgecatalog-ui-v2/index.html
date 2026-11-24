@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Redoc reference for the Blast Radius Calculator API." />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Blast Radius Calculator | API Reference v2</title>
+    <script>
+      (function () {
+        var savedTheme = null;
+        try { savedTheme = localStorage.getItem("forgecatalog-theme"); } catch (error) {}
+        var theme = savedTheme === "light" || savedTheme === "dark"
+          ? savedTheme
+          : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <link rel="icon" type="image/png" href="../forgecatalog-ui/assets/favicon-32x32.png" sizes="32x32" />
+    <style>
+      :root {
+        color-scheme: light;
+        --header: #ffffff;
+        --header-soft: #f1f5f9;
+        --header-text: #172033;
+        --header-muted: #64748b;
+        --header-border: #b4c0cf;
+        --ink: #172033;
+        --muted: #64748b;
+        --line: #d6dee8;
+        --canvas: #ffffff;
+        --accent: #c86516;
+        --accent-light: #f3a34f;
+        --focus: #60a5fa;
+        --color-primary-base: #b85d12;
+        --navbar-bg-color: var(--bg-color);
+        --sidebar-bg-color: var(--bg-color);
+      }
+
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --header: #111619;
+        --header-soft: #1d252a;
+        --header-text: #eef3f7;
+        --header-muted: #aeb9c6;
+        --header-border: #52617a;
+        --ink: #eef3f7;
+        --muted: #aeb9c6;
+        --line: #3b4853;
+        --canvas: #111619;
+        --accent: #df7924;
+        --accent-light: #f0a15b;
+        --color-primary-base: #f0a15b;
+        --navbar-bg-color: var(--bg-color);
+        --sidebar-bg-color: var(--bg-color);
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--bg-color, var(--canvas));
+        color: var(--ink);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      .skip-link {
+        position: fixed;
+        top: 10px;
+        left: 14px;
+        z-index: 2000;
+        transform: translateY(-160%);
+        padding: 10px 14px;
+        border-radius: 8px;
+        background: #fff;
+        color: var(--header);
+        font-weight: 800;
+        text-decoration: none;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+      }
+      .skip-link:focus { transform: translateY(0); }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        display: flex;
+        min-height: 74px;
+        align-items: center;
+        gap: 20px;
+        padding: 0 28px;
+        border-bottom: 3px solid var(--accent);
+        background: var(--bg-color, var(--canvas));
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.1);
+        transition: background-color 180ms ease, box-shadow 180ms ease;
+      }
+
+      .brand {
+        display: inline-flex;
+        min-width: max-content;
+        align-items: center;
+        gap: 10px;
+        color: var(--header-text);
+        text-decoration: none;
+      }
+      .brand-logo-window {
+        display: block;
+        width: 44px;
+        height: 44px;
+        overflow: hidden;
+        flex: 0 0 auto;
+        background: transparent;
+      }
+      .brand-logo {
+        display: block;
+        width: 144px;
+        height: 96px;
+        max-width: none;
+        transform: translate(-51px, -9px);
+      }
+      .brand-copy { display: grid; line-height: 1.1; }
+      .brand-name {
+        width: max-content;
+        background: linear-gradient(90deg, #f5a14d 0%, #dc731d 50%, #d6a02a 100%);
+        background-clip: text;
+        color: transparent;
+        font-size: 18px;
+        font-weight: 850;
+        letter-spacing: -0.02em;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .brand-section { margin-top: 4px; color: var(--header-muted); font-size: 12px; font-weight: 650; }
+      .header-divider { width: 1px; height: 32px; background: var(--header-border); }
+      .service-title {
+        overflow: hidden;
+        color: var(--header-text);
+        font-size: 14px;
+        font-weight: 700;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .header-actions { display: flex; align-items: center; gap: 9px; margin-left: auto; }
+      .theme-toggle {
+        display: inline-grid;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        place-items: center;
+        border: 1px solid var(--header-border);
+        border-radius: 8px;
+        background: transparent;
+        color: var(--accent);
+        cursor: pointer;
+      }
+      .theme-toggle:hover { border-color: var(--accent); background: var(--header-soft); }
+      .theme-toggle:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+      .theme-icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
+      .theme-icon-sun { display: none; }
+      :root[data-theme="dark"] .theme-icon-sun { display: block; }
+      :root[data-theme="dark"] .theme-icon-moon { display: none; }
+      .header-link {
+        display: inline-flex;
+        min-height: 40px;
+        align-items: center;
+        justify-content: center;
+        padding: 0 14px;
+        border: 1px solid var(--header-border);
+        border-radius: 8px;
+        color: var(--header-text);
+        font-size: 13px;
+        font-weight: 750;
+        text-decoration: none;
+        transition: border-color 160ms ease, background 160ms ease;
+      }
+      .header-link:hover { border-color: var(--accent); background: var(--header-soft); }
+      .header-link-primary { border-color: #b95610; background: #b95610; color: #fff; }
+      .header-link-primary:hover { border-color: var(--accent-light); background: #c86516; }
+      .brand:focus-visible, .header-link:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+
+      #reference { min-height: calc(100vh - 74px); background: var(--bg-color, var(--canvas)); }
+      a[href="https://redocly.com/redoc/"] { display: none !important; }
+      #reference button[aria-label*="color mode" i],
+      #reference button[title*="color mode" i],
+      [role="tooltip"][data-redoc-theme-tooltip] { display: none !important; }
+      .loading-state, .error-state {
+        display: grid;
+        min-height: calc(100vh - 74px);
+        place-content: center;
+        gap: 14px;
+        padding: 40px 24px;
+        text-align: center;
+      }
+      .loading-spinner {
+        width: 34px;
+        height: 34px;
+        margin: 0 auto;
+        border: 3px solid #dce3ec;
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: spin 750ms linear infinite;
+      }
+      .loading-state strong, .error-state h1 { margin: 0; color: var(--ink); font-size: 18px; }
+      .loading-state p, .error-state p { max-width: 560px; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
+      .error-state { display: none; }
+      .error-state h1 { font-size: 24px; }
+      .error-state a { color: #075fb5; font-weight: 750; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      @media (max-width: 760px) {
+        .site-header { min-height: 66px; gap: 12px; padding: 0 16px; }
+        .brand-logo-window { width: 40px; height: 40px; }
+        .brand-logo { width: 131px; height: 87px; transform: translate(-46px, -8px); }
+        .brand-section, .header-divider, .service-title, .header-link-secondary { display: none; }
+        .header-link { min-height: 38px; padding: 0 11px; }
+        #reference, .loading-state, .error-state { min-height: calc(100vh - 66px); }
+      }
+
+      @media (max-width: 440px) {
+        .brand-name { font-size: 16px; }
+        .header-link-primary { font-size: 12px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#reference">Skip to API reference</a>
+
+    <header class="site-header" aria-label="API reference header">
+      <a class="brand" href="https://forgecatalog.probestack.io" aria-label="Open ForgeCatalog home">
+        <span class="brand-logo-window" aria-hidden="true">
+          <img class="brand-logo" src="../forgecatalog-ui/assets/logo.svg" alt="" />
+        </span>
+        <span class="brand-copy">
+          <span class="brand-name">ForgeCatalog</span>
+          <span class="brand-section">API Reference</span>
+        </span>
+      </a>
+      <span class="header-divider" aria-hidden="true"></span>
+      <span class="service-title">Blast Radius Calculator</span>
+      <nav class="header-actions" aria-label="Reference actions">
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark theme" aria-pressed="false" title="Switch theme">
+          <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20.4 15.3A8.5 8.5 0 0 1 8.7 3.6 8.5 8.5 0 1 0 20.4 15.3Z"></path>
+          </svg>
+          <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+        </button>
+        <a class="header-link header-link-secondary" href="/v3/api-docs" target="_blank" rel="noopener">Open JSON</a>
+        <a class="header-link header-link-primary" href="../forgecatalog-ui-v3/index.html">Test API</a>
+      </nav>
+    </header>
+
+    <main id="reference" tabindex="-1">
+      <div class="loading-state" id="loading-state" role="status" aria-live="polite">
+        <span class="loading-spinner" aria-hidden="true"></span>
+        <strong>Preparing the API reference</strong>
+        <p>Loading the latest Blast Radius Calculator specification.</p>
+      </div>
+      <div class="error-state" id="error-state" role="alert">
+        <h1>API reference could not be loaded</h1>
+        <p>Check that the service and its API description are available, then reload this page.</p>
+        <p><a href="/v3/api-docs">Open the raw API description</a></p>
+      </div>
+    </main>
+
+    <noscript>
+      <p>This API reference requires JavaScript. You can still <a href="/v3/api-docs">open the raw API description</a>.</p>
+    </noscript>
+
+    <script type="module">
+      const reference = document.getElementById("reference");
+      const errorState = document.getElementById("error-state");
+      const themeToggle = document.getElementById("theme-toggle");
+      const themeColor = document.querySelector('meta[name="theme-color"]');
+
+      function updateThemeControls(theme) {
+        const isDark = theme === "dark";
+        themeToggle.setAttribute("aria-pressed", String(isDark));
+        themeToggle.setAttribute("aria-label", isDark ? "Switch to light theme" : "Switch to dark theme");
+        themeToggle.setAttribute("title", isDark ? "Switch to light theme" : "Switch to dark theme");
+        themeColor.setAttribute("content", isDark ? "#111619" : "#ffffff");
+      }
+
+      function setTheme(theme, savePreference) {
+        document.documentElement.dataset.theme = theme;
+        updateThemeControls(theme);
+        if (savePreference) {
+          try { localStorage.setItem("forgecatalog-theme", theme); } catch (error) {}
+        }
+      }
+
+      updateThemeControls(document.documentElement.dataset.theme || "light");
+      themeToggle.addEventListener("click", function () {
+        setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark", true);
+      });
+
+      new MutationObserver(function () {
+        const theme = document.documentElement.dataset.theme;
+        if (theme === "light" || theme === "dark") {
+          updateThemeControls(theme);
+          try { localStorage.setItem("forgecatalog-theme", theme); } catch (error) {}
+        }
+      }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+      function removeDuplicateRedocControls() {
+        reference.querySelectorAll('button[aria-label*="color mode" i], button[title*="color mode" i]').forEach(function (node) {
+          node.remove();
+        });
+        document.querySelectorAll('[role="tooltip"]').forEach(function (node) {
+          if (node.textContent.trim().toLowerCase() === "switch color mode") node.remove();
+        });
+      }
+      new MutationObserver(removeDuplicateRedocControls).observe(document.body, { childList: true, subtree: true });
+
+      try {
+        const { init } = await import("https://cdn.redoc.ly/redoc/v3.x/bundles/redoc.standalone.js");
+        await init(
+          "/v3/api-docs",
+          {
+            router: "hash",
+            disableTelemetry: true,
+            scrollYOffset: 74,
+            sortRequiredPropsFirst: true,
+            schemasExpansionLevel: "1",
+            downloadUrls: [
+              { title: "Download OpenAPI description", url: "/v3/api-docs" }
+            ]
+          },
+          reference
+        );
+        removeDuplicateRedocControls();
+      } catch (error) {
+        reference.replaceChildren(errorState);
+        errorState.style.display = "grid";
+        console.error("Failed to initialize the API reference", error);
+      }
+    </script>
+  </body>
+</html>

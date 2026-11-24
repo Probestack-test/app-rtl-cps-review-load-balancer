@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Interactive Scalar reference for the Blast Radius Calculator API." />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Blast Radius Calculator | Interactive API Reference</title>
+    <script>
+      (function () {
+        var savedTheme = null;
+        try { savedTheme = localStorage.getItem("forgecatalog-theme"); } catch (error) {}
+        var theme = savedTheme === "light" || savedTheme === "dark"
+          ? savedTheme
+          : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <link rel="icon" type="image/png" href="../forgecatalog-ui/assets/favicon-32x32.png" sizes="32x32" />
+    <style>
+      :root {
+        color-scheme: light;
+        --page: #ffffff;
+        --panel: #f8fafc;
+        --text: #172033;
+        --muted: #64748b;
+        --border: #b4c0cf;
+        --accent: #b85d12;
+        --accent-hover: #c86516;
+        --focus: #60a5fa;
+      }
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --page: #111619;
+        --panel: #182025;
+        --text: #eef3f7;
+        --muted: #aeb9c6;
+        --border: #52617a;
+        --accent: #df7924;
+        --accent-hover: #f0a15b;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      .skip-link {
+        position: fixed;
+        top: 10px;
+        left: 14px;
+        z-index: 2000;
+        transform: translateY(-160%);
+        padding: 10px 14px;
+        border-radius: 8px;
+        background: var(--page);
+        color: var(--text);
+        font-weight: 800;
+        text-decoration: none;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+      }
+      .skip-link:focus { transform: translateY(0); }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        display: flex;
+        min-height: 74px;
+        align-items: center;
+        gap: 20px;
+        padding: 0 28px;
+        border-bottom: 3px solid var(--accent);
+        background: var(--page);
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.1);
+      }
+      .brand {
+        display: inline-flex;
+        min-width: max-content;
+        align-items: center;
+        gap: 10px;
+        color: var(--text);
+        text-decoration: none;
+      }
+      .brand-logo-window {
+        display: block;
+        width: 44px;
+        height: 44px;
+        overflow: hidden;
+        flex: 0 0 auto;
+        background: transparent;
+      }
+      .brand-logo {
+        display: block;
+        width: 144px;
+        height: 96px;
+        max-width: none;
+        transform: translate(-51px, -9px);
+      }
+      .brand-copy { display: grid; line-height: 1.1; }
+      .brand-name {
+        width: max-content;
+        background: linear-gradient(90deg, #f09a43 0%, #d56c18 48%, #d3a02c 100%);
+        background-clip: text;
+        color: transparent;
+        font-size: 18px;
+        font-weight: 850;
+        letter-spacing: -0.02em;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .brand-section { margin-top: 4px; color: var(--muted); font-size: 12px; font-weight: 650; }
+      .header-divider { width: 1px; height: 32px; background: var(--border); }
+      .service-title {
+        overflow: hidden;
+        color: var(--text);
+        font-size: 14px;
+        font-weight: 700;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .header-actions { display: flex; align-items: center; gap: 9px; margin-left: auto; }
+      .theme-toggle {
+        display: inline-grid;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        place-items: center;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: transparent;
+        color: var(--accent);
+        cursor: pointer;
+      }
+      .theme-toggle:hover { border-color: var(--accent); background: var(--panel); }
+      .theme-toggle:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+      .theme-icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
+      .theme-icon-sun { display: none; }
+      :root[data-theme="dark"] .theme-icon-sun { display: block; }
+      :root[data-theme="dark"] .theme-icon-moon { display: none; }
+      .header-link {
+        display: inline-flex;
+        min-height: 40px;
+        align-items: center;
+        justify-content: center;
+        padding: 0 14px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text);
+        font-size: 13px;
+        font-weight: 750;
+        text-decoration: none;
+      }
+      .header-link:hover { border-color: var(--accent); background: var(--panel); }
+      .brand:focus-visible, .header-link:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+
+      #scalar-reference { min-height: calc(100vh - 74px); background: var(--page); }
+      .loading-state, .error-state {
+        display: grid;
+        min-height: calc(100vh - 74px);
+        place-content: center;
+        gap: 14px;
+        padding: 40px 24px;
+        text-align: center;
+      }
+      .loading-spinner {
+        width: 34px;
+        height: 34px;
+        margin: 0 auto;
+        border: 3px solid var(--border);
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: spin 750ms linear infinite;
+      }
+      .loading-state strong, .error-state h1 { margin: 0; color: var(--text); font-size: 18px; }
+      .loading-state p, .error-state p { max-width: 560px; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
+      .error-state { display: none; }
+      .error-state h1 { font-size: 24px; }
+      .error-state a { color: var(--accent); font-weight: 750; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      @media (max-width: 760px) {
+        .site-header { min-height: 66px; gap: 12px; padding: 0 16px; }
+        .brand-logo-window { width: 40px; height: 40px; }
+        .brand-logo { width: 131px; height: 87px; transform: translate(-46px, -8px); }
+        .brand-section, .header-divider, .service-title, .header-link-secondary { display: none; }
+        .header-link { min-height: 38px; padding: 0 11px; }
+        #scalar-reference, .loading-state, .error-state { min-height: calc(100vh - 66px); }
+      }
+      @media (max-width: 440px) {
+        .brand-name { font-size: 16px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#scalar-reference">Skip to interactive API reference</a>
+    <header class="site-header" aria-label="Interactive API reference header">
+      <a class="brand" href="#scalar-reference" aria-label="ForgeCatalog interactive API reference home">
+        <span class="brand-logo-window" aria-hidden="true">
+          <img class="brand-logo" src="../forgecatalog-ui/assets/logo.svg" alt="" />
+        </span>
+        <span class="brand-copy">
+          <span class="brand-name">ForgeCatalog</span>
+          <span class="brand-section">Interactive API</span>
+        </span>
+      </a>
+      <span class="header-divider" aria-hidden="true"></span>
+      <span class="service-title">Blast Radius Calculator</span>
+      <nav class="header-actions" aria-label="Reference actions">
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark theme" aria-pressed="false" title="Switch theme">
+          <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20.4 15.3A8.5 8.5 0 0 1 8.7 3.6 8.5 8.5 0 1 0 20.4 15.3Z"></path>
+          </svg>
+          <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+        </button>
+        <a class="header-link header-link-secondary" href="/v3/api-docs" target="_blank" rel="noopener">Open JSON</a>
+        <a class="header-link" href="../forgecatalog-ui-v2/index.html">Reading view</a>
+      </nav>
+    </header>
+
+    <main id="scalar-reference">
+      <div class="loading-state" id="loading-state" role="status" aria-live="polite">
+        <span class="loading-spinner" aria-hidden="true"></span>
+        <strong>Preparing the interactive API reference</strong>
+        <p>Loading endpoints, authentication controls, and the request client.</p>
+      </div>
+      <div class="error-state" id="error-state" role="alert">
+        <h1>Interactive reference could not be loaded</h1>
+        <p>Check the network connection and API description, then reload this page.</p>
+        <p><a href="/v3/api-docs">Open the raw API description</a></p>
+      </div>
+    </main>
+
+    <noscript>
+      <p>This API reference requires JavaScript. You can still <a href="/v3/api-docs">open the raw API description</a>.</p>
+    </noscript>
+
+    <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
+    <script>
+      (function () {
+        var container = document.getElementById("scalar-reference");
+        var errorState = document.getElementById("error-state");
+        var themeToggle = document.getElementById("theme-toggle");
+        var themeColor = document.querySelector('meta[name="theme-color"]');
+        var isDark = document.documentElement.dataset.theme === "dark";
+
+        function updateThemeControls(theme) {
+          var dark = theme === "dark";
+          themeToggle.setAttribute("aria-pressed", String(dark));
+          themeToggle.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
+          themeToggle.setAttribute("title", dark ? "Switch to light theme" : "Switch to dark theme");
+          themeColor.setAttribute("content", dark ? "#111619" : "#ffffff");
+        }
+
+        updateThemeControls(isDark ? "dark" : "light");
+        themeToggle.addEventListener("click", function () {
+          var nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+          try { localStorage.setItem("forgecatalog-theme", nextTheme); } catch (error) {}
+          document.documentElement.dataset.theme = nextTheme;
+          updateThemeControls(nextTheme);
+          window.location.reload();
+        });
+
+        function removeScalarBranding() {
+          container.querySelectorAll('a[href*="scalar.com"], a[href*="github.com/scalar"], [class*="scalar-logo"], [data-testid*="scalar-logo"]').forEach(function (node) {
+            node.remove();
+          });
+          container.querySelectorAll('[aria-label], [title]').forEach(function (node) {
+            var label = (node.getAttribute("aria-label") || node.getAttribute("title") || "").trim();
+            if (/^(powered by scalar|scalar logo|open in scalar|download scalar)$/i.test(label)) node.remove();
+          });
+          container.querySelectorAll("span, small, p").forEach(function (node) {
+            var label = node.textContent.trim();
+            if (/^(powered by scalar|api docs by scalar|scalar)$/i.test(label)) node.remove();
+          });
+        }
+        new MutationObserver(removeScalarBranding).observe(container, { childList: true, subtree: true });
+
+        try {
+          if (!window.Scalar || typeof window.Scalar.createApiReference !== "function") {
+            throw new Error("Scalar library did not load");
+          }
+          window.Scalar.createApiReference("#scalar-reference", {
+            url: "/v3/api-docs",
+            layout: "modern",
+            theme: "default",
+            darkMode: isDark,
+            hideDarkModeToggle: true,
+            hideClientButton: true,
+            showSidebar: true,
+            modelsSectionLabel: "Schemas",
+            defaultOpenFirstTag: true,
+            orderRequiredPropertiesFirst: true,
+            telemetry: false,
+            persistAuth: false,
+            authentication: {
+              preferredSecurityScheme: "bearerAuth"
+            },
+            customCss: `
+              a[href*="scalar.com"],
+              a[href*="github.com/scalar"],
+              [class*="scalar-logo"],
+              [data-testid*="scalar-logo"] {
+                display: none !important;
+              }
+            `,
+            onResponseReceived: async function (event) {
+              if (event.response.status !== 401) return;
+              var headers = new Headers(event.response.headers);
+              headers.delete("content-length");
+              headers.set("content-type", "application/json");
+              return new Response(JSON.stringify({
+                code: "authentication_required",
+                message: "Enter a valid bearer token in Authentication, then send the request again."
+              }), {
+                status: 401,
+                statusText: "Unauthorized",
+                headers: headers
+              });
+            }
+          });
+          removeScalarBranding();
+        } catch (error) {
+          container.replaceChildren(errorState);
+          errorState.style.display = "grid";
+          console.error("Failed to initialize the interactive API reference", error);
+        }
+      })();
+    </script>
+  </body>
+</html>
