@@ -18,7 +18,6 @@ public class SpringDocConfiguration {
     @Bean(name = "com.probestack.forgestudio.design.config.SpringDocConfiguration.apiInfo")
     OpenAPI apiInfo() {
         return new OpenAPI()
-                .paths(InfrastructureOpenApi.paths())
                 .info(
                         new Info()
                                 .title("Review Load Balancer")
