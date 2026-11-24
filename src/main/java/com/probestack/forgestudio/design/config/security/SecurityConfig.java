@@ -73,6 +73,7 @@ public class SecurityConfig {
             "/actuator/prometheus",
             "/swagger-ui.html",
             "/swagger-ui/**",
+            "/v3/api-docs.yaml",
             "/v3/api-docs/**",
             "/forgecatalog-ui/**",
             "/forgecatalog-ui-v2/**",
